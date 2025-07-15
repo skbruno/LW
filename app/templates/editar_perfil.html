@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">Editar Perfil</h1>
+
+<form method="POST" class="box" style="max-width: 700px; margin: auto;">
+
+  <div class="field">
+    <label class="label">Nome</label>
+    <input class="input" name="nome" value="{{ cliente.nome if cliente else fornecedor.nome }}" required>
+  </div>
+
+  <div class="field">
+    <label class="label">{{ 'CPF' if cliente else 'CNPJ' }}</label>
+    <input class="input" name="{{ 'cpf' if cliente else 'cnpj' }}" value="{{ cliente.cpf if cliente else fornecedor.cnpj }}" required>
+  </div>
+
+  <div class="field">
+    <label class="label">Telefone</label>
+    <input class="input" name="telefone" value="{{ cliente.contato.telefone if cliente else fornecedor.contato.telefone }}">
+  </div>
+
+  <div class="field">
+    <label class="label">Email</label>
+    <input class="input" name="email" value="{{ cliente.contato.email if cliente else fornecedor.contato.email }}">
+  </div>
+
+  <div class="field">
+    <label class="label">CEP</label>
+    <input class="input" name="cep" value="{{ cliente.endereco.cep if cliente else fornecedor.endereco.cep }}">
+  </div>
+
+  <div class="field">
+    <label class="label">Número</label>
+    <input class="input" name="numero" value="{{ cliente.endereco.numero if cliente else fornecedor.endereco.numero }}">
+  </div>
+
+  <div class="field">
+    <label class="label">Ponto de Referência</label>
+    <input class="input" name="pontoreferencia" value="{{ cliente.endereco.pontoreferencia if cliente else fornecedor.endereco.pontoreferencia }}">
+  </div>
+
+  <div class="field is-grouped is-grouped-right">
+    <button class="button is-success" type="submit">Salvar Alterações</button>
+    <a href="{{ url_for('main.profile') }}" class="button is-light">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

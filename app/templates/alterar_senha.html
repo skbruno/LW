@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">Alterar Senha</h1>
+
+<form method="POST" class="box" style="max-width: 500px; margin: auto;">
+  <div class="field">
+    <label class="label">Senha Atual</label>
+    <input class="input" type="password" name="senha_atual" required>
+  </div>
+
+  <div class="field">
+    <label class="label">Nova Senha</label>
+    <input class="input" type="password" name="nova_senha" required>
+  </div>
+
+  <div class="field">
+    <label class="label">Confirmar Nova Senha</label>
+    <input class="input" type="password" name="confirmar" required>
+  </div>
+
+  <div class="field is-grouped is-grouped-right">
+    <button class="button is-success" type="submit">Alterar Senha</button>
+    <a href="{{ url_for('main.profile') }}" class="button is-light">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

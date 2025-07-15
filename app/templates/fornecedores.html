@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">Empresas (Fornecedores) Cadastradas</h1>
+
+<div class="columns is-multiline">
+  {% for f in fornecedores %}
+  <div class="column is-one-third">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          {{ f.nome }}
+        </p>
+      </header>
+      <div class="card-content">
+        <div class="content">
+          <strong>CNPJ:</strong> {{ f.cnpj }}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <p>Nenhuma empresa cadastrada.</p>
+  {% endfor %}
+</div>
+
+<a href="{{ url_for('main.index') }}" class="button is-link mt-4">Voltar</a>
+{% endblock %}
