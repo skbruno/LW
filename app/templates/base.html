@@ -27,20 +27,18 @@
             flex: 1; 
         }
 
-        /* Estilo para a seção principal (hero) */
         .hero-section {
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            height: calc(100vh - 56px); /* Altura da tela menos a altura do navbar */
+            height: calc(100vh - 56px); 
             color: white;
             background: url('/static/images/bg1.jpg') no-repeat center center;
             background-size: cover;
             position: relative;
         }
 
-        /* Sobreposição para escurecer o fundo */
         .hero-section::before {
             content: '';
             position: absolute;
@@ -52,19 +50,16 @@
             z-index: 1;
         }
 
-        /* Garante que o conteúdo fique acima da sobreposição */
         .hero-section .container {
             position: relative;
             z-index: 2;
         }
 
-        /* Estilo do título principal (já definido no seu CSS) */
         .hero-section h1 {
             font-size: 3.5rem;
             font-weight: bold;
         }
 
-        /* Estilo do subtítulo (já definido no seu CSS) */
         .hero-section p {
             font-size: 1.25rem;
             max-width: 600px;

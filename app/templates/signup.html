@@ -92,6 +92,10 @@
                   <label for="cnpj" class="form-label">CNPJ</label>
                   <input type="text" class="form-control" id="cnpj" name="cnpj">
                 </div>
+                <div class="col-md-6 mb-3">
+                  <label for="atualizacao_servico" class="form-label">Data de Atualização de Serviço</label>
+                  <input type="date" class="form-control" id="atualizacao_servico" name="atualizacao_servico">
+                </div>
               </div>
             </div>
 
@@ -115,25 +119,19 @@
 
 {% block scripts %}
 <script>
-  // Espera o documento HTML ser completamente carregado
   document.addEventListener('DOMContentLoaded', function() {
     
-    // Pega os elementos do formulário
     const tipoUsuarioSelect = document.getElementById('tipo_usuario');
     const clienteForm = document.getElementById('cliente_form');
     const fornecedorForm = document.getElementById('fornecedor_form');
-
-    // Define a função que mostra/esconde os formulários
     function toggleForm() {
       const tipo = tipoUsuarioSelect.value;
       clienteForm.style.display = tipo === '1' ? 'block' : 'none';
       fornecedorForm.style.display = tipo === '2' ? 'block' : 'none';
     }
 
-    // Adiciona o "escutador" de eventos ao select. É uma forma mais moderna que o 'onchange' no HTML.
     tipoUsuarioSelect.addEventListener('change', toggleForm);
 
-    // Chama a função uma vez no início para garantir que os formulários comecem escondidos
     toggleForm();
   });
 </script>

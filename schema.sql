@@ -1,7 +1,8 @@
 CREATE TABLE cadastro (
     idcadastro INTEGER PRIMARY KEY AUTOINCREMENT,
     login TEXT,
-    senha TEXT
+    senha TEXT,
+    tipo_usuario INTEGER
 );
 
 CREATE TABLE contato (
