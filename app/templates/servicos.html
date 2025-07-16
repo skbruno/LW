@@ -1,38 +1,58 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title">Lista de Serviços</h1>
+<div class="container my-5">
 
-<table class="table is-fullwidth is-striped">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th>Preço</th>
-            <th>Empresas</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for servico in servicos %}
-        <tr>
-            <td>{{ servico.nome }}</td>
-            <td>{{ servico.descricao }}</td>
-            <td>R$ {{ servico.preco }}</td>
-            <td>
-              {% if servico.fornecedores %}
-                {% for fornecedor in servico.fornecedores %}
-                    {{ fornecedor.nome }}{% if not loop.last %}, {% endif %}
-                {% endfor %}
-              {% else %}
-                Nenhuma empresa vinculada
-              {% endif %}
-            </td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="4">Nenhum serviço cadastrado.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+  <h1 class="text-center mb-4">Lista de Serviços</h1>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      
+      {% if servicos %}
+        <div class="table-responsive">
+          <table class="table table-striped table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Descrição</th>
+                <th scope="col" class="text-end">Preço</th>
+                <th scope="col">Empresas Associadas</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for servico in servicos %}
+                <tr>
+                  <td><strong>{{ servico.nome }}</strong></td>
+                  <td>{{ servico.descricao }}</td>
+                  <td class="text-end">R$ {{ "%.2f"|format(servico.preco|float) }}</td>
+                  <td>
+                    {% if servico.fornecedores %}
+                      {% for fornecedor in servico.fornecedores %}
+                        <span class="badge bg-secondary">{{ fornecedor.nome }}</span>
+                      {% endfor %}
+                    {% else %}
+                      <span class="text-muted">Nenhuma</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="alert alert-info text-center mb-0" role="alert">
+          Nenhum serviço cadastrado no momento.
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{{ url_for('main.index') }}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Voltar
+    </a>
+  </div>
+
+</div>
 {% endblock %}

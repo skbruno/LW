@@ -1,58 +1,62 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title">Nova Proposta de Orçamento</h1>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
 
-<form method="POST" class="box" style="max-width: 700px; margin: auto;">
-  <div class="field">
-    <label class="label">Descrição</label>
-    <div class="control">
-      <input class="input" type="text" name="descricao" placeholder="Descrição da proposta" required>
-    </div>
-  </div>
+      <h1 class="text-center mb-4">Nova Proposta de Orçamento</h1>
 
-  <div class="field">
-    <label class="label">Área das Placas (m²)</label>
-    <div class="control">
-      <input class="input" type="number" name="area_placas" placeholder="Ex: 20" required>
-    </div>
-  </div>
+      <div class="card p-4 shadow-sm">
+        <form method="POST">
+          
+          <div class="mb-3">
+            <label for="descricao" class="form-label fw-bold">Descrição</label>
+            <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Ex: Instalação de 5 painéis solares" required>
+          </div>
 
-  <div class="field">
-    <label class="label">Valor do Orçamento (R$)</label>
-    <div class="control">
-      <input class="input" type="number" name="valor_orcamento" placeholder="Ex: 15000" required>
-    </div>
-  </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="area_placas" class="form-label fw-bold">Área das Placas (m²)</label>
+              <div class="input-group">
+                <span class="input-group-text">m²</span>
+                <input type="number" step="0.01" class="form-control" id="area_placas" name="area_placas" placeholder="20" required>
+              </div>
+            </div>
 
-  <div class="field">
-    <label class="label">Local</label>
-    <div class="control">
-      <input class="input" type="text" name="local" placeholder="Ex: Rua Exemplo, 123" required>
-    </div>
-  </div>
+            <div class="col-md-6 mb-3">
+              <label for="valor_orcamento" class="form-label fw-bold">Valor do Orçamento (R$)</label>
+              <div class="input-group">
+                <span class="input-group-text">R$</span>
+                <input type="number" step="0.01" class="form-control" id="valor_orcamento" name="valor_orcamento" placeholder="15000.00" required>
+              </div>
+            </div>
+          </div>
 
-  <div class="field">
-    <label class="label">Empresa Fornecedora</label>
-    <div class="control">
-      <div class="select is-fullwidth">
-        <select name="idfornecedor" required>
-          <option value="" disabled selected>Selecione um fornecedor</option>
-          {% for f in fornecedores %}
-          <option value="{{ f.idfornecedor }}">{{ f.nome }} ({{ f.cnpj }})</option>
-          {% endfor %}
-        </select>
+          <div class="mb-3">
+            <label for="local" class="form-label fw-bold">Local</label>
+            <input type="text" class="form-control" id="local" name="local" placeholder="Ex: Rua das Flores, 123, Salvador-BA" required>
+          </div>
+          
+          <div class="mb-4">
+            <label for="idfornecedor" class="form-label fw-bold">Empresa Fornecedora</label>
+            <select class="form-select" id="idfornecedor" name="idfornecedor" required>
+              <option value="" disabled selected>Selecione um fornecedor...</option>
+              {% for f in fornecedores %}
+                <option value="{{ f.idfornecedor }}">{{ f.nome }} ({{ f.cnpj }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2">
+            <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-warning fw-bold">Salvar Orçamento</button>
+          </div>
+          
+        </form>
       </div>
-    </div>
-  </div>
 
-  <div class="field is-grouped is-grouped-right mt-4">
-    <div class="control">
-      <button class="button is-success" type="submit">Salvar Orçamento</button>
-    </div>
-    <div class="control">
-      <a href="{{ url_for('main.index') }}" class="button is-light">Cancelar</a>
     </div>
   </div>
-</form>
+</div>
 {% endblock %}

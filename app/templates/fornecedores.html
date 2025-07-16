@@ -1,28 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title">Empresas (Fornecedores) Cadastradas</h1>
+<div class="container my-5">
 
-<div class="columns is-multiline">
-  {% for f in fornecedores %}
-  <div class="column is-one-third">
-    <div class="card">
-      <header class="card-header">
-        <p class="card-header-title">
-          {{ f.nome }}
-        </p>
-      </header>
-      <div class="card-content">
-        <div class="content">
-          <strong>CNPJ:</strong> {{ f.cnpj }}
+  <h1 class="text-center mb-5">Empresas Cadastradas</h1>
+
+  <div class="row g-4">
+    {% for f in fornecedores %}
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-header bg-white fw-bold">
+            <i class="bi bi-building"></i> {{ f.nome }}
+          </div>
+          <div class="card-body">
+            <p class="card-text">
+              <strong>CNPJ:</strong> {{ f.cnpj }}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    {% else %}
+      <div class="col-12">
+        <div class="alert alert-info text-center" role="alert">
+          Nenhuma empresa cadastrada no momento.
+        </div>
+      </div>
+    {% endfor %}
   </div>
-  {% else %}
-  <p>Nenhuma empresa cadastrada.</p>
-  {% endfor %}
-</div>
 
-<a href="{{ url_for('main.index') }}" class="button is-link mt-4">Voltar</a>
+  <div class="text-center mt-5">
+    <a href="{{ url_for('main.index') }}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Voltar
+    </a>
+  </div>
+
+</div>
 {% endblock %}
