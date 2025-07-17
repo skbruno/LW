@@ -54,6 +54,11 @@ class Fornecedor(db.Model):
         secondary='servico_has_fornecedor',
         back_populates='fornecedores'
     )
+    orcamentos = db.relationship(
+        'Orcamento',
+        secondary='orcamento_has_fornecedor',
+        back_populates='fornecedores'
+    )
 
 
 class Servico(db.Model):
@@ -87,6 +92,11 @@ class Orcamento(db.Model):
     clientes = db.relationship(
         'Cliente',
         secondary='proposta_has_cliente',
+        back_populates='orcamentos'
+    )
+    fornecedores = db.relationship(
+        'Fornecedor',
+        secondary='orcamento_has_fornecedor',
         back_populates='orcamentos'
     )
 

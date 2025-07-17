@@ -15,6 +15,10 @@ def index_forn():
 
 @main.route('/dashboard')
 def dashboard():
+
+    if 'usuario' not in session:
+        return redirect(url_for('auth.login'))
+                        
     usuario_id = session.get('idcadastro')
     if not usuario_id:
         return "Fornecedor não encontrado"
@@ -34,11 +38,9 @@ def dashboard_forn():
 
     fornecedor_logado = Fornecedor.query.filter_by(cadastro_idcadastro=usuario_id).first()
     servicos_do_fornecedor = fornecedor_logado.servicos
+    orcamento_do_fornecedor = fornecedor_logado.orcamentos
 
-    Orcamento_logado = Orcamento.query.filter_by(cadastro_idcadastro=usuario_id).first()
-    orcamento_do_fornecedor = Orcamento_logado
-
-    return render_template('dashboard_forn.html', usuario=session.get('usuario'), meus_servicos=servicos_do_fornecedor)
+    return render_template('dashboard_forn.html', usuario=session.get('usuario'), meus_servicos=servicos_do_fornecedor, orcamentos=orcamento_do_fornecedor)
 
 @main.route('/fornecedores')
 def fornecedores():
