@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, session, redirect, url_for, flash,
 from app import db
 from app.models import Fornecedor, Servico, Cliente, PropostaCliente, OrcamentoFornecedor, Orcamento, ServicoFornecedor, Cadastro
 from datetime import datetime
+from flask_mail import Mail, Message
 
 main = Blueprint('main', __name__)
 
@@ -144,5 +145,53 @@ def novo_orcamento():
 
     fornecedores = Fornecedor.query.all()
     return render_template('novo_orcamento.html', fornecedores=fornecedores)
+
+@main.route('/decidir_orcamento', methods=['POST'])
+def decidir_orcamento():
+    orcamento_id = request.form.get('id')
+    acao = request.form.get('acao')
+
+    orcamento = Orcamento.query.get(orcamento_id)
+    if not orcamento:
+        flash("Orçamento não encontrado.", "danger")
+        return redirect(url_for('main.dashboard_forn'))
+
+    # Verifica se já foi tomada decisão
+    if orcamento.status_orcamento != 0:
+        flash("A decisão sobre este orçamento já foi tomada.", "warning")
+        return redirect(url_for('main.dashboard_forn'))
+
+    if acao == 'aprovar':
+        orcamento.status_orcamento = 1
+        assunto = "Seu orçamento foi aprovado!"
+        corpo_template = "Olá {}, o orçamento '{}' foi aprovado pelo fornecedor. Valor final: R$ {}."
+    elif acao == 'rejeitar':
+        orcamento.status_orcamento = 2
+        assunto = "Seu orçamento foi rejeitado"
+        corpo_template = "Olá {}, o orçamento '{}' foi recusado pelo fornecedor. Caso queira enviar outro, estamos à disposição."
+    else:
+        flash("Ação inválida.", "danger")
+        return redirect(url_for('main.dashboard_forn'))
+
+    db.session.commit()
+
+    for cliente in orcamento.clientes:
+        if cliente.contato and cliente.contato.email:
+            nome_cliente = cliente.nome if cliente.nome else "Cliente"
+            corpo = corpo_template.format(nome_cliente, orcamento.descricao, orcamento.valor_orcamento)
+            msg = Message(
+                subject=assunto,
+                sender='seuemail@gmail.com', 
+                recipients=[cliente.contato.email],
+                body=corpo
+            )
+            try:
+                mail.send(msg)
+            except Exception as e:
+                flash(f"Erro ao enviar e-mail para {nome_cliente}: {str(e)}", "danger")
+
+    flash('Decisão registrada e cliente(s) notificado(s) por e-mail.', 'success')
+    return redirect(url_for('main.dashboard_forn'))
+
 
 

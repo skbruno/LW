@@ -1,11 +1,23 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail
 
+mail = Mail()
 db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
+
+    app.config['SECRET_KEY'] = 'tryusxbzvvcosokj'
+    
+    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USERNAME'] = 'brunojogadorfps@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'tryusxbzvvcosokj'
+    
+    mail.init_app(app)
 
     # Garante que a pasta instance/ existe
     os.makedirs(app.instance_path, exist_ok=True)

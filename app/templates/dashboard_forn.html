@@ -27,29 +27,63 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                             <div>
                                 <p class="mb-1 fw-bold">{{ orcamento.descricao }}</p>
-                                <small class="text-muted">Cliente: {{ orcamento.descricao }} | Data: {{ orcamento.data_proposta.strftime('%d/%m/%Y') }}</small>
+                                <small class="text-muted">Cliente: {{ orcamento.clientes[0].nome }} | Data: {{ orcamento.data_proposta.strftime('%d/%m/%Y') }}</small>
                             </div>
                             <div>
-                                {% if orcamento.status == 'Aprovado' %}
+                                {% if orcamento.status_orcamento == 1 %}
                                     <span class="badge bg-success me-2">Aprovado</span>
-                                {% elif orcamento.status == 'Recusado' %}
-                                    <span class="badge bg-danger text-dark me-2">Recusado</span>
+                                {% elif orcamento.status_orcamento == 2 %}
+                                    <span class="badge bg-danger me-2">Recusado</span>
                                 {% else %}
                                     <span class="badge bg-warning me-2">Pendente</span>
                                 {% endif %}
-                                <a href="#" class="btn btn-outline-secondary btn-sm">Ver</a>
+                                <a href="#" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#detalhesOrcamentoModal"data-bs-descricao="{{ orcamento.descricao }}"data-bs-cliente="{{ orcamento.clientes[0].nome }}"data-bs-data="{{ orcamento.data_proposta.strftime('%d/%m/%Y') }}"data-bs-valor="{{ orcamento.valor_orcamento | round(2) }}"data-bs-status="{{ orcamento.status_orcamento }}">Ver</a>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="sr-only">...</span>
-                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="visually-hidden">...</span> </button>
                                     
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Aceitar</a>
-                                        <a class="dropdown-item" href="#">Recusar</a>
+                                    {% if orcamento.status_orcamento == 0 %}
+                                    <div class="dropdown-menu dropdown-menu-end"> <form method="POST" action="{{ url_for('main.decidir_orcamento') }}">
+                                            <input type="hidden" name="id" value="{{ orcamento.idproposta }}">
+                                            <input type="hidden" name="acao" value="aprovar">
+                                            <button type="submit" class="dropdown-item">Aceitar</button>
+                                        </form>
+                                        <form method="POST" action="{{ url_for('main.decidir_orcamento') }}">
+                                            <input type="hidden" name="id" value="{{ orcamento.idproposta }}">
+                                            <input type="hidden" name="acao" value="rejeitar">
+                                            <button type="submit" class="dropdown-item">Recusar</button>
+                                        </form>
                                     </div>
+                                    {% else %}
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <span class="dropdown-item disabled">Ação já tomada</span>
+                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </li>
+                        <div class="modal fade" id="detalhesOrcamentoModal" tabindex="-1" aria-labelledby="detalhesOrcamentoModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="detalhesOrcamentoModalLabel">Detalhes do Orçamento</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Descrição:</strong> <span id="modalDescricao"></span></p>
+                                        <p><strong>Cliente:</strong> <span id="modalCliente"></span></p>
+                                        <p><strong>Data da Proposta:</strong> <span id="modalData"></span></p>
+                                        <p><strong>Valor:</strong> R$ <span id="modalValor"></span></p>
+                                        <p><strong>Status:</strong>
+                                            <span id="modalStatus"></span>
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         {% else %}
                             <li class="list-group-item text-center text-muted p-4">Nenhum orçamento cadastrado.</li>
                         {% endfor %}
@@ -89,7 +123,41 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
+
+
+<script>
+    const detalhesModal = document.getElementById('detalhesOrcamentoModal');
+
+    detalhesModal.addEventListener('show.bs.modal', function (event) {
+        
+        const button = event.relatedTarget;
+
+        const descricao = button.getAttribute('data-bs-descricao');
+        const cliente = button.getAttribute('data-bs-cliente');
+        const data = button.getAttribute('data-bs-data');
+        const valor = button.getAttribute('data-bs-valor');
+        const status = button.getAttribute('data-bs-status'); 
+
+        const modalDescricao = detalhesModal.querySelector('#modalDescricao');
+        const modalCliente = detalhesModal.querySelector('#modalCliente');
+        const modalData = detalhesModal.querySelector('#modalData');
+        const modalValor = detalhesModal.querySelector('#modalValor');
+        const modalStatus = detalhesModal.querySelector('#modalStatus');
+
+        modalDescricao.textContent = descricao;
+        modalCliente.textContent = cliente;
+        modalData.textContent = data;
+        modalValor.textContent = valor;
+
+        if (status === '1') {
+            modalStatus.innerHTML = '<span class="badge bg-success">Aprovado</span>';
+        } else if (status === '2') {
+            modalStatus.innerHTML = '<span class="badge bg-danger">Recusado</span>';
+        } else {
+            modalStatus.innerHTML = '<span class="badge bg-warning">Pendente</span>';
+        }
+    });
+</script>
 {% endblock %}

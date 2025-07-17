@@ -154,6 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const orcamentoLabelAdicionais = document.getElementById('orcamento-label-adicionais');
     const orcamentoValorAdicionais = document.getElementById('orcamento-valor-adicionais');
     const orcamentoTotal = document.getElementById('orcamento-total');
+    const hiddenTotalInput = document.getElementById('orcamento_total_final')
 
     // --- MAPA DE PREÇOS (para busca rápida) ---
     const servicosPrecoMap = {};
@@ -180,6 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
         orcamentoLabelAdicionais.textContent = `Adicionais (${countAdicionais})`;
         orcamentoValorAdicionais.textContent = valorAdicionaisFormatado;
         orcamentoTotal.textContent = valorAdicionaisFormatado;
+        orcamentoTotal.textContent = valorAdicionaisFormatado; 
         hiddenTotalInput.value = totalAdicionais;
     }
 

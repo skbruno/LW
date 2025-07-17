@@ -32,7 +32,8 @@
                                     {% if orcamento.clientes %}
                                         Cliente: {{ orcamento.clientes[0].nome }} | 
                                     {% endif %}
-                                    Data: {{ orcamento.data_proposta.strftime('%d/%m/%Y') if orcamento.data_proposta }}
+                                    Data: {{ orcamento.data_proposta.strftime('%d/%m/%Y') if orcamento.data_proposta }} | 
+                                    Valor: {{ orcamento.valor_orcamento }}
                                 </small>
                             </div>
                             <div>
