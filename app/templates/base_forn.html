@@ -114,6 +114,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <div class="container">
                 <a class="navbar-brand navbar-brand-custom" href="{{ url_for('main.index') }}">
+                    <img src="../static/img/logoo1.png" alt="Logo EnerGiamento" height="30" class="d-inline-block align-text-top me-2">
                     <span>Ener</span><span class="text-dark">Giamento</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,7 +144,7 @@
 
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{{ url_for('auth.editar_perfil_forn') }}">Editar Perfil</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('auth.alterar_senha') }}">Alterar Senha</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('auth.alterar_senha_forn') }}">Alterar Senha</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ url_for('auth.login') }}">Login</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('auth.signup') }}">Cadastre-se</a></li>

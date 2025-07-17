@@ -130,6 +130,35 @@ def alterar_senha():
 
     return render_template("alterar_senha.html")
 
+@auth.route('/alterar_senha_forn', methods=['GET', 'POST'])
+def alterar_senha_forn():
+    login = session.get('usuario')
+    if not login:
+        flash("Você precisa estar logado.", "danger")
+        return redirect(url_for('auth.login'))
+
+    cadastro = Cadastro.query.filter_by(login=login).first()
+
+    if request.method == 'POST':
+        senha_atual = request.form['senha_atual']
+        nova_senha = request.form['nova_senha']
+        confirmar = request.form['confirmar']
+
+        if cadastro.senha != senha_atual:
+            flash("Senha atual incorreta.", "danger")
+            return redirect(url_for('auth.alterar_senha'))
+
+        if nova_senha != confirmar:
+            flash("Nova senha e confirmação não coincidem.", "danger")
+            return redirect(url_for('auth.alterar_senha'))
+
+        cadastro.senha = nova_senha
+        db.session.commit()
+        flash("Senha alterada com sucesso!", "success")
+        return redirect(url_for('main.index'))
+
+    return render_template("alterar_senha_forn.html")
+
 
 @auth.route('/logout')
 def logout():

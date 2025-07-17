@@ -1,0 +1,37 @@
+{% extends "base_forn.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h1 class="card-title text-center mb-4">Alterar Senha</h1>
+
+          <form method="POST">
+            <div class="mb-3">
+              <label for="senha_atual" class="form-label"><strong>Senha Atual</strong></label>
+              <input type="password" class="form-control" id="senha_atual" name="senha_atual" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="nova_senha" class="form-label"><strong>Nova Senha</strong></label>
+              <input type="password" class="form-control" id="nova_senha" name="nova_senha" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="confirmar" class="form-label"><strong>Confirmar Nova Senha</strong></label>
+              <input type="password" class="form-control" id="confirmar" name="confirmar" required>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+              <a href="{{ url_for('main.index_forn') }}" class="btn btn-secondary me-md-2">Cancelar</a>
+              <button class="btn btn-primary" type="submit">Alterar Senha</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
