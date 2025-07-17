@@ -181,7 +181,7 @@ def decidir_orcamento():
             corpo = corpo_template.format(nome_cliente, orcamento.descricao, orcamento.valor_orcamento)
             msg = Message(
                 subject=assunto,
-                sender='seuemail@gmail.com', 
+                sender='brunojogadorfps@gmail.com', 
                 recipients=[cliente.contato.email],
                 body=corpo
             )
