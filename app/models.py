@@ -17,6 +17,7 @@ class Endereco(db.Model):
     cep = db.Column(db.String(45))
     numero = db.Column(db.Integer)
     pontoreferencia = db.Column(db.String(150))
+    fornecedores = db.relationship('Fornecedor', back_populates='endereco')
 
 
 class Cliente(db.Model):
@@ -40,7 +41,7 @@ class Fornecedor(db.Model):
     contato_idcontato = db.Column(db.Integer, db.ForeignKey('contato.idcontato'))
     cadastro_idcadastro = db.Column(db.Integer, db.ForeignKey('cadastro.idcadastro'))
     endereco_idendereco = db.Column(db.Integer, db.ForeignKey('endereco.idendereco'))
-    endereco = db.relationship('Endereco')
+    endereco = db.relationship('Endereco', back_populates='fornecedores')
     atualizacao_servico = db.Column(db.Date)
     contato = db.relationship('Contato')
 

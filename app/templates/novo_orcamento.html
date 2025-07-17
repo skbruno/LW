@@ -1,62 +1,144 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-8">
 
-      <h1 class="text-center mb-4">Nova Proposta de Orçamento</h1>
+<style>
+  .bg-wrapper {
+    /* Caminho para sua imagem de fundo */
+    background-image: url('../static/img/bg1.jpg');
 
-      <div class="card p-4 shadow-sm">
-        <form method="POST">
-          
-          <div class="mb-3">
-            <label for="descricao" class="form-label fw-bold">Descrição</label>
-            <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Ex: Instalação de 5 painéis solares" required>
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+  }
+  .bg-overlay {
+    background-color: rgba(0, 0, 0, 0.6); 
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    min-height: 100vh; 
+  }
+
+  .bg-overlay h1 {
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+  }
+
+  .card-transparent {
+      background-color: rgba(255, 255, 255, 0.932) !important; 
+      backdrop-filter: blur(5px); 
+  }
+</style>
+
+
+<div class="bg-wrapper">
+  <div class="bg-overlay">
+    
+    <div class="container">
+      <h1 class="text-center mb-5">Nova Proposta de Orçamento</h1>
+
+      <div class="row g-5 justify-content-center">
+        
+        <div class="col-lg-7">
+          <div class="card p-4 shadow-sm h-100 card-transparent">
+            <form method="POST">
+                <h4 class="mb-4">Detalhes da Proposta</h4>
+                
+                <div class="mb-3">
+                    <label for="descricao" class="form-label fw-bold">Descrição</label>
+                    <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Ex: Instalação de 5 painéis solares" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="area_placas" class="form-label fw-bold">Área das Placas (m²)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">m²</span>
+                            <input type="number" step="0.01" class="form-control" id="area_placas" name="area_placas" placeholder="20" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="data_entrega" class="form-label fw-bold">Data de Entrega</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                            <input type="date" class="form-control" id="data_entrega" name="data_entrega">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="local" class="form-label fw-bold">Local</label>
+                    <input type="text" class="form-control" id="local" name="local" placeholder="Ex: Rua das Flores, 123, Salvador-BA" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="idfornecedor" class="form-label fw-bold">Empresa Fornecedora</label>
+                    <select class="form-select" id="idfornecedor" name="idfornecedor" required>
+                        <option value="" disabled selected>Selecione um fornecedor...</option>
+                        {% for f in fornecedores %}
+                        <option value="{{ f.idfornecedor }}">{{ f.nome }} ({{ f.cnpj }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Serviços Adicionais</label>
+                    <div class="border rounded p-3">
+                        {% for f in fornecedores %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="servicos" value="{{ f.idfornecedor }}" id="servico-{{ f.idfornecedor }}">
+                            <label class="form-check-label" for="servico-{{ f.idfornecedor }}">
+                                {{ f.nome }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="observacao" class="form-label fw-bold">Observação</label>
+                    <textarea class="form-control" id="observacao" name="observacao" rows="4" placeholder="Detalhes importantes, condições, etc."></textarea>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="{{ url_for('main.index') }}" class="btn btn-danger">Cancelar</a>
+                </div>
+            </form>
           </div>
+        </div>
 
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="area_placas" class="form-label fw-bold">Área das Placas (m²)</label>
-              <div class="input-group">
-                <span class="input-group-text">m²</span>
-                <input type="number" step="0.01" class="form-control" id="area_placas" name="area_placas" placeholder="20" required>
+        <div class="col-lg-5">
+          <div class="card p-4 shadow-sm sticky-top card-transparent" style="top: 2rem;">
+              <h4 class="mb-4">Orçamento</h4>
+              
+              <div class="d-flex justify-content-between mb-2">
+                  <span>Itens (0)</span>
+                  <span>R$00,00</span>
               </div>
-            </div>
-
-            <div class="col-md-6 mb-3">
-              <label for="valor_orcamento" class="form-label fw-bold">Valor do Orçamento (R$)</label>
-              <div class="input-group">
-                <span class="input-group-text">R$</span>
-                <input type="number" step="0.01" class="form-control" id="valor_orcamento" name="valor_orcamento" placeholder="15000.00" required>
+              <div class="d-flex justify-content-between mb-2">
+                  <span>Frete</span>
+                  <span>R$00,00</span>
               </div>
-            </div>
-          </div>
+              <div class="d-flex justify-content-between text-muted mb-3">
+                  <span>Adicionais</span>
+                  <span>R$00,00</span>
+              </div>
+              
+              <hr>
 
-          <div class="mb-3">
-            <label for="local" class="form-label fw-bold">Local</label>
-            <input type="text" class="form-control" id="local" name="local" placeholder="Ex: Rua das Flores, 123, Salvador-BA" required>
+              <div class="d-flex justify-content-between fw-bold fs-5 mb-4">
+                  <span>Total</span>
+                  <span>R$00,00</span>
+              </div>
+              
+              <button type="submit" class="btn btn-warning fw-bold">Salvar Proposta
+                  <i class="bi bi-arrow-right ms-2"></i>
+              </button>
           </div>
-          
-          <div class="mb-4">
-            <label for="idfornecedor" class="form-label fw-bold">Empresa Fornecedora</label>
-            <select class="form-select" id="idfornecedor" name="idfornecedor" required>
-              <option value="" disabled selected>Selecione um fornecedor...</option>
-              {% for f in fornecedores %}
-                <option value="{{ f.idfornecedor }}">{{ f.nome }} ({{ f.cnpj }})</option>
-              {% endfor %}
-            </select>
-          </div>
-
-          <div class="d-flex justify-content-end gap-2">
-            <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancelar</a>
-            <button type="submit" class="btn btn-warning fw-bold">Salvar Orçamento</button>
-          </div>
-          
-        </form>
+        </div>
       </div>
-
     </div>
+
   </div>
 </div>
+
 {% endblock %}

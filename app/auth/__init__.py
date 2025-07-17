@@ -17,7 +17,11 @@ def login():
         if usuario:
             session['usuario'] = usuario.login  # salva login na sessão
             flash(f'Bem-vindo, {usuario.login}!', 'success')
-            return redirect(url_for('main.profile'))  # redireciona para dashboard
+
+            if usuario.tipo_usuario == 1:
+                return redirect(url_for('main.dashboard'))  # redireciona para dashboard
+            else:
+                return redirect(url_for('main.dashboard_forn'))
         else:
             flash('Login ou senha inválidos.', 'danger')
             return redirect(url_for('auth.login'))
@@ -121,7 +125,7 @@ def alterar_senha():
         cadastro.senha = nova_senha
         db.session.commit()
         flash("Senha alterada com sucesso!", "success")
-        return redirect(url_for('main.profile'))
+        return redirect(url_for('main.index'))
 
     return render_template("alterar_senha.html")
 
@@ -166,6 +170,6 @@ def editar_perfil():
 
         db.session.commit()
         flash("Perfil atualizado com sucesso!", "success")
-        return redirect(url_for('main.profile'))
+        return redirect(url_for('main.index'))
 
     return render_template("editar_perfil.html", cadastro=cadastro, cliente=cliente, fornecedor=fornecedor)
