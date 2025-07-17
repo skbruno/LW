@@ -36,9 +36,9 @@
                                 </small>
                             </div>
                             <div>
-                                {% if orcamento.status_orcamento == 2 %}
+                                {% if orcamento.status_orcamento == 1 %}
                                     <span class="badge bg-success me-2">Aprovado</span>
-                                {% elif orcamento.status_orcamento == 1 %}
+                                {% elif orcamento.status_orcamento == 0 %}
                                     <span class="badge bg-warning text-dark me-2">Pendente</span>
                                 {% else %}
                                     <span class="badge bg-danger me-2">Recusado</span>

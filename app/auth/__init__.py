@@ -174,3 +174,44 @@ def editar_perfil():
         return redirect(url_for('main.index'))
 
     return render_template("editar_perfil.html", cadastro=cadastro, cliente=cliente, fornecedor=fornecedor)
+
+
+
+@auth.route('/editar_perfil_forn', methods=['GET', 'POST'])
+def editar_perfil_forn():
+    login = session.get('usuario')
+    if not login:
+        flash("Você precisa estar logado.", "danger")
+        return redirect(url_for('auth.login'))
+
+    cadastro = Cadastro.query.filter_by(login=login).first()
+
+    # Buscar cliente ou fornecedor ligado ao cadastro
+    cliente = Cliente.query.filter_by(cadastro_idcadastro=cadastro.idcadastro).first()
+    fornecedor = Fornecedor.query.filter_by(cadastro_idcadastro=cadastro.idcadastro).first()
+
+    if request.method == 'POST':
+        # Atualiza contato e endereço
+        if cliente:
+            cliente.nome = request.form['nome']
+            cliente.cpf = request.form['cpf']
+            cliente.contato.telefone = request.form['telefone']
+            cliente.contato.email = request.form['email']
+            cliente.endereco.cep = request.form['cep']
+            cliente.endereco.numero = request.form['numero']
+            cliente.endereco.pontoreferencia = request.form['pontoreferencia']
+        elif fornecedor:
+            fornecedor.nome = request.form['nome']
+            fornecedor.cnpj = request.form['cnpj']
+            fornecedor.contato.telefone = request.form['telefone']
+            fornecedor.contato.email = request.form['email']
+            fornecedor.endereco.cep = request.form['cep']
+            fornecedor.endereco.numero = request.form['numero']
+            fornecedor.endereco.pontoreferencia = request.form['pontoreferencia']
+
+        db.session.commit()
+        flash("Perfil atualizado com sucesso!", "success")
+        return redirect(url_for('main.index'))
+
+    return render_template("editar_perfil_forn.html", cadastro=cadastro, cliente=cliente, fornecedor=fornecedor)
+

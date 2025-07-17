@@ -32,12 +32,21 @@
                             <div>
                                 {% if orcamento.status == 'Aprovado' %}
                                     <span class="badge bg-success me-2">Aprovado</span>
-                                {% elif orcamento.status == 'Pendente' %}
-                                    <span class="badge bg-warning text-dark me-2">Pendente</span>
+                                {% elif orcamento.status == 'Recusado' %}
+                                    <span class="badge bg-danger text-dark me-2">Recusado</span>
                                 {% else %}
-                                    <span class="badge bg-danger me-2">Recusado</span>
+                                    <span class="badge bg-warning me-2">Pendente</span>
                                 {% endif %}
                                 <a href="#" class="btn btn-outline-secondary btn-sm">Ver</a>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="sr-only">...</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">Aceitar</a>
+                                        <a class="dropdown-item" href="#">Recusar</a>
+                                    </div>
+                                </div>
                             </div>
                         </li>
                         {% else %}
