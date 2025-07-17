@@ -17,11 +17,18 @@
               <input type="text" class="form-control" id="nome" name="nome" value="{{ cliente.nome if cliente else fornecedor.nome }}" required>
             </div>
 
-            <div class="mb-3">
-              <label for="documento" class="form-label">{{ 'CPF' if cliente else 'CNPJ' }}</label>
-              <input type="text" class="form-control" id="documento" name="{{ 'cpf' if cliente else 'cnpj' }}" value="{{ cliente.cpf if cliente else fornecedor.cnpj }}" required>
-            </div>
 
+            <div class="row">  
+              <div class="col-md-6 mb-3">
+                <label for="documento" class="form-label">{{ 'CPF' if cliente else 'CNPJ' }}</label>
+                <input type="text" class="form-control" id="documento" name="{{ 'cpf' if cliente else 'cnpj' }}" value="{{ cliente.cpf if cliente else fornecedor.cnpj }}" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="documento" class="form-label">{{ 'Data Nascimento' if cliente else 'Data Atualizacao' }}</label>
+                <input type="date" class="form-control" id="documento" name="{{ 'data_nascimento' if cliente else 'atualizacao_servico' }}" value="{{ cliente.data_nascimento if cliente else fornecedor.atualizacao_servico }}" required>
+              </div>
+            </div>
+            
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="telefone" class="form-label">Telefone</label>
@@ -52,7 +59,7 @@
             </div>
 
             <div class="d-flex justify-content-end gap-2 mt-4">
-              <a href="{{ url_for('main.profile') }}" class="btn btn-secondary">Cancelar</a>
+              <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancelar</a>
               <button type="submit" class="btn btn-primary">Salvar Alterações</button>
             </div>
 

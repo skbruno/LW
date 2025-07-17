@@ -4,9 +4,7 @@
 
 <style>
   .bg-wrapper {
-    /* Caminho para sua imagem de fundo */
-    background-image: url('../static/img/bg1.jpg');
-
+    background-image: url('{{ url_for('static', filename='img/bg1.jpg') }}');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -17,18 +15,31 @@
     padding-bottom: 5rem;
     min-height: 100vh; 
   }
-
   .bg-overlay h1 {
-      color: white;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
   }
-
   .card-transparent {
-      background-color: rgba(255, 255, 255, 0.932) !important; 
-      backdrop-filter: blur(5px); 
+    background-color: rgba(255, 255, 255, 0.95) !important; 
+    backdrop-filter: blur(5px); 
   }
 </style>
 
+<script>
+    const fornecedoresComServicos = {
+        {% for f in fornecedores %}
+            "{{ f.idfornecedor }}": [
+                {% for s in f.servicos %}
+                    { 
+                        id: "{{ s.idservico }}", 
+                        nome: "{{ s.nome }}",
+                        preco: {{ s.preco }}
+                    },
+                {% endfor %}
+            ],
+        {% endfor %}
+    };
+</script>
 
 <div class="bg-wrapper">
   <div class="bg-overlay">
@@ -40,68 +51,62 @@
         
         <div class="col-lg-7">
           <div class="card p-4 shadow-sm h-100 card-transparent">
-            <form method="POST">
-                <h4 class="mb-4">Detalhes da Proposta</h4>
-                
-                <div class="mb-3">
-                    <label for="descricao" class="form-label fw-bold">Descrição</label>
-                    <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Ex: Instalação de 5 painéis solares" required>
-                </div>
+            <form method="POST" id="form-proposta">
+              <input type="hidden" name="orcamento_total_final" id="orcamento_total_final" value="0">
+              <h4 class="mb-4">Detalhes da Proposta</h4>
+              
+              <div class="mb-3">
+                  <label for="descricao" class="form-label fw-bold">Descrição</label>
+                  <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Ex: Instalação de 5 painéis solares" required>
+              </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="area_placas" class="form-label fw-bold">Área das Placas (m²)</label>
-                        <div class="input-group">
-                            <span class="input-group-text">m²</span>
-                            <input type="number" step="0.01" class="form-control" id="area_placas" name="area_placas" placeholder="20" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="data_entrega" class="form-label fw-bold">Data de Entrega</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
-                            <input type="date" class="form-control" id="data_entrega" name="data_entrega">
-                        </div>
-                    </div>
-                </div>
+              <div class="row">
+                  <div class="col-md-6 mb-3">
+                      <label for="area_placas" class="form-label fw-bold">Área das Placas (m²)</label>
+                      <div class="input-group">
+                          <span class="input-group-text">m²</span>
+                          <input type="number" step="0.01" class="form-control" id="area_placas" name="area_placas" placeholder="20" required>
+                      </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                      <label for="data_entrega" class="form-label fw-bold">Data de Entrega</label>
+                      <div class="input-group">
+                          <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                          <input type="date" class="form-control" id="data_entrega" name="data_entrega">
+                      </div>
+                  </div>
+              </div>
 
-                <div class="mb-3">
-                    <label for="local" class="form-label fw-bold">Local</label>
-                    <input type="text" class="form-control" id="local" name="local" placeholder="Ex: Rua das Flores, 123, Salvador-BA" required>
-                </div>
+              <div class="mb-3">
+                  <label for="local" class="form-label fw-bold">Local</label>
+                  <input type="text" class="form-control" id="local" name="local" placeholder="Ex: Rua das Flores, 123, Salvador-BA" required>
+              </div>
 
-                <div class="mb-4">
-                    <label for="idfornecedor" class="form-label fw-bold">Empresa Fornecedora</label>
-                    <select class="form-select" id="idfornecedor" name="idfornecedor" required>
-                        <option value="" disabled selected>Selecione um fornecedor...</option>
-                        {% for f in fornecedores %}
-                        <option value="{{ f.idfornecedor }}">{{ f.nome }} ({{ f.cnpj }})</option>
-                        {% endfor %}
-                    </select>
-                </div>
+              <div class="mb-4">
+                  <label for="idfornecedor" class="form-label fw-bold">Empresa Fornecedora</label>
+                  <select class="form-select" id="idfornecedor" name="idfornecedor" required>
+                      <option value="" disabled selected>Selecione um fornecedor...</option>
+                      {% for f in fornecedores %}
+                      <option value="{{ f.idfornecedor }}">{{ f.nome }} ({{ f.cnpj }})</option>
+                      {% endfor %}
+                  </select>
+              </div>
 
-                <div class="mb-4">
-                    <label class="form-label fw-bold">Serviços Adicionais</label>
-                    <div class="border rounded p-3">
-                        {% for f in fornecedores %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="servicos" value="{{ f.idfornecedor }}" id="servico-{{ f.idfornecedor }}">
-                            <label class="form-check-label" for="servico-{{ f.idfornecedor }}">
-                                {{ f.nome }}
-                            </label>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
+              <div class="mb-4">
+                  <label class="form-label fw-bold">Serviços Adicionais</label>
+                  <div id="servicos-container" class="border rounded p-3 bg-light">
+                      <p class="text-muted mb-0">Selecione um fornecedor para ver os serviços disponíveis.</p>
+                  </div>
+              </div>
 
-                <div class="mb-3">
-                    <label for="observacao" class="form-label fw-bold">Observação</label>
-                    <textarea class="form-control" id="observacao" name="observacao" rows="4" placeholder="Detalhes importantes, condições, etc."></textarea>
-                </div>
+              <div class="mb-3">
+                  <label for="observacao" class="form-label fw-bold">Observação</label>
+                  <textarea class="form-control" id="observacao" name="observacao" rows="4" placeholder="Detalhes importantes, condições, etc."></textarea>
+              </div>
 
-                <div class="d-flex justify-content-end gap-2 mt-4">
-                    <a href="{{ url_for('main.index') }}" class="btn btn-danger">Cancelar</a>
-                </div>
+              <div class="d-flex justify-content-end gap-2 mt-4">
+                  <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancelar</a>
+              </div>
             </form>
           </div>
         </div>
@@ -111,34 +116,117 @@
               <h4 class="mb-4">Orçamento</h4>
               
               <div class="d-flex justify-content-between mb-2">
-                  <span>Itens (0)</span>
-                  <span>R$00,00</span>
-              </div>
-              <div class="d-flex justify-content-between mb-2">
-                  <span>Frete</span>
-                  <span>R$00,00</span>
-              </div>
-              <div class="d-flex justify-content-between text-muted mb-3">
-                  <span>Adicionais</span>
-                  <span>R$00,00</span>
+                  <span id="orcamento-label-adicionais">Adicionais (0)</span>
+                  <span id="orcamento-valor-adicionais">R$ 0,00</span>
               </div>
               
               <hr>
 
               <div class="d-flex justify-content-between fw-bold fs-5 mb-4">
                   <span>Total</span>
-                  <span>R$00,00</span>
+                  <span id="orcamento-total">R$ 0,00</span>
               </div>
               
-              <button type="submit" class="btn btn-warning fw-bold">Salvar Proposta
+              <button type="submit" form="form-proposta" class="btn btn-warning fw-bold">
+                  Salvar Proposta
                   <i class="bi bi-arrow-right ms-2"></i>
               </button>
           </div>
         </div>
+
       </div>
     </div>
 
   </div>
 </div>
 
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- ELEMENTOS DO DOM ---
+    const fornecedorSelect = document.getElementById('idfornecedor');
+    const servicosContainer = document.getElementById('servicos-container');
+    const orcamentoLabelAdicionais = document.getElementById('orcamento-label-adicionais');
+    const orcamentoValorAdicionais = document.getElementById('orcamento-valor-adicionais');
+    const orcamentoTotal = document.getElementById('orcamento-total');
+
+    // --- MAPA DE PREÇOS (para busca rápida) ---
+    const servicosPrecoMap = {};
+    if (typeof fornecedoresComServicos !== 'undefined') {
+        Object.values(fornecedoresComServicos).flat().forEach(servico => {
+            servicosPrecoMap[servico.id] = servico.preco;
+        });
+    }
+
+    function atualizarOrcamento() {
+        let totalAdicionais = 0;
+        let countAdicionais = 0;
+        
+        const checkboxesMarcados = servicosContainer.querySelectorAll('input[type="checkbox"]:checked');
+        
+        checkboxesMarcados.forEach(checkbox => {
+            const servicoId = checkbox.value;
+            totalAdicionais += servicosPrecoMap[servicoId] || 0;
+            countAdicionais++;
+        });
+
+        const valorAdicionaisFormatado = totalAdicionais.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        
+        orcamentoLabelAdicionais.textContent = `Adicionais (${countAdicionais})`;
+        orcamentoValorAdicionais.textContent = valorAdicionaisFormatado;
+        orcamentoTotal.textContent = valorAdicionaisFormatado;
+        hiddenTotalInput.value = totalAdicionais;
+    }
+
+
+    function atualizarServicosDisponiveis() {
+        if (!fornecedorSelect) return;
+
+        const selectedFornecedorId = fornecedorSelect.value;
+        const servicos = (typeof fornecedoresComServicos !== 'undefined' && fornecedoresComServicos[selectedFornecedorId]) ? fornecedoresComServicos[selectedFornecedorId] : [];
+        
+        servicosContainer.innerHTML = '';
+        servicosContainer.classList.remove('bg-light');
+
+        if (servicos.length > 0) {
+            servicos.forEach(servico => {
+                const precoFormatado = servico.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                const div = document.createElement('div');
+                div.classList.add('form-check');
+                div.innerHTML = `
+                    <input class="form-check-input" type="checkbox" name="servicos_adicionais" value="${servico.id}" id="servico-${servico.id}">
+                    <label class="form-check-label" for="servico-${servico.id}">
+                        ${servico.nome} (${precoFormatado})
+                    </label>
+                `;
+                servicosContainer.appendChild(div);
+            });
+        } else {
+            servicosContainer.innerHTML = '<p class="text-muted mb-0">Nenhum serviço adicional oferecido por este fornecedor.</p>';
+            servicosContainer.classList.add('bg-light');
+        }
+        
+        atualizarOrcamento();
+    }
+
+
+    if (fornecedorSelect) {
+        fornecedorSelect.addEventListener('change', atualizarServicosDisponiveis);
+    }
+    
+    if (servicosContainer) {
+        servicosContainer.addEventListener('click', function(event) {
+            if (event.target.type === 'checkbox') {
+                atualizarOrcamento();
+            }
+        });
+    }
+
+});
+</script>
 {% endblock %}

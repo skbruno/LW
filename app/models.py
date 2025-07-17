@@ -32,6 +32,11 @@ class Cliente(db.Model):
     endereco = db.relationship('Endereco') 
     data_nascimento = db.Column(db.Date)
     contato = db.relationship('Contato')
+    orcamentos = db.relationship(
+        'Orcamento',
+        secondary='proposta_has_cliente',
+        back_populates='clientes'
+    )
 
 
 class Fornecedor(db.Model):
@@ -44,6 +49,11 @@ class Fornecedor(db.Model):
     endereco = db.relationship('Endereco', back_populates='fornecedores')
     atualizacao_servico = db.Column(db.Date)
     contato = db.relationship('Contato')
+    servicos = db.relationship(
+        'Servico',
+        secondary='servico_has_fornecedor',
+        back_populates='fornecedores'
+    )
 
 
 class Servico(db.Model):
@@ -54,7 +64,7 @@ class Servico(db.Model):
     fornecedores = db.relationship(
         'Fornecedor',
         secondary='servico_has_fornecedor',
-        backref='servicos'
+        back_populates='servicos'
     )
 
 
@@ -74,6 +84,11 @@ class Orcamento(db.Model):
     data_proposta = db.Column(db.Date)
     data_reposta = db.Column(db.Date)
     local = db.Column(db.String(100))
+    clientes = db.relationship(
+        'Cliente',
+        secondary='proposta_has_cliente',
+        back_populates='orcamentos'
+    )
 
 
 class OrcamentoFornecedor(db.Model):

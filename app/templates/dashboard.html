@@ -27,17 +27,22 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                             <div>
                                 <p class="mb-1 fw-bold">{{ orcamento.descricao }}</p>
-                                <small class="text-muted">Cliente: {{ orcamento.cliente.nome }} | Data: {{ orcamento.data_criacao.strftime('%d/%m/%Y') }}</small>
+                                
+                                <small class="text-muted">
+                                    {% if orcamento.clientes %}
+                                        Cliente: {{ orcamento.clientes[0].nome }} | 
+                                    {% endif %}
+                                    Data: {{ orcamento.data_proposta.strftime('%d/%m/%Y') if orcamento.data_proposta }}
+                                </small>
                             </div>
                             <div>
-                                {% if orcamento.status == 'Aprovado' %}
+                                {% if orcamento.status_orcamento == 2 %}
                                     <span class="badge bg-success me-2">Aprovado</span>
-                                {% elif orcamento.status == 'Pendente' %}
+                                {% elif orcamento.status_orcamento == 1 %}
                                     <span class="badge bg-warning text-dark me-2">Pendente</span>
                                 {% else %}
                                     <span class="badge bg-danger me-2">Recusado</span>
                                 {% endif %}
-                                <a href="#" class="btn btn-outline-secondary btn-sm">Ver</a>
                             </div>
                         </li>
                         {% else %}
@@ -46,7 +51,7 @@
                     </ul>
                 </div>
                 <div class="card-footer bg-white text-center">
-                    <a href="#" class="text-decoration-none">Ver todos os orçamentos</a>
+                    <a href="{{ url_for('main.novo_orcamento') }}" class="text-decoration-none">Fazer Novo Orcamento</a>
                 </div>
             </div>
         </div>
@@ -58,11 +63,11 @@
                 </div>
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush">
-                        {% for empresa in empresas %}
+                        {% for f in fornecedores %}
                         <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                             <div>
-                                <p class="mb-0 fw-bold">{{ empresa.nome }}</p>
-                                <small class="text-muted">CNPJ: {{ empresa.cnpj }}</small>
+                                <p class="mb-0 fw-bold">{{ f.nome }}</p>
+                                <small class="text-muted">CNPJ: {{ f.cnpj }}</small>
                             </div>
                             <a href="#" class="btn btn-outline-secondary btn-sm">Ver Perfil</a>
                         </li>

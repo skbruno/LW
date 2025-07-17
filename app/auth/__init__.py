@@ -11,11 +11,12 @@ def login():
         login = request.form['login']
         senha = request.form['senha']
 
-        # Verifica se o usuário existe com login e senha corretos
+         # Verifica se o usuário existe com login e senha corretos
         usuario = Cadastro.query.filter_by(login=login, senha=senha).first()
 
         if usuario:
-            session['usuario'] = usuario.login  # salva login na sessão
+            session['usuario'] = usuario.login
+            session['idcadastro'] = usuario.idcadastro
             flash(f'Bem-vindo, {usuario.login}!', 'success')
 
             if usuario.tipo_usuario == 1:
@@ -38,7 +39,7 @@ def signup():
 
         if Cadastro.query.filter_by(login=login).first():
             flash('Login já existe.', 'danger')
-            return redirect(url_for('auth.signup'))
+            return redirect(url_for('auth.login'))
 
         # Criar contato
         contato = Contato(
