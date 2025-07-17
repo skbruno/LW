@@ -1,0 +1,75 @@
+{% extends "base_forn.html" %}
+
+{% block content %}
+
+<style>
+  .bg-wrapper {
+    /* Caminho para sua imagem de fundo */
+    background-image: url('../static/img/bg1.jpg');
+
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+  }
+  .bg-overlay {
+    background-color: rgba(0, 0, 0, 0.6); 
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    min-height: 100vh; 
+  }
+
+  .bg-overlay h1 {
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+  }
+
+  .card-transparent {
+      background-color: rgba(255, 255, 255, 0.932) !important; 
+      backdrop-filter: blur(5px); 
+  }
+</style>
+
+
+<div class="bg-wrapper">
+  <div class="bg-overlay">
+    
+    <div class="container">
+      <h1 class="text-center mb-5">Novo Serviço</h1>
+
+      <div class="row g-5 justify-content-center">
+        
+        <div class="col-lg-7">
+          <div class="card p-4 shadow-sm h-100 card-transparent">
+            <form method="POST">
+                <h4 class="mb-4">Detalhes do Serviço</h4>
+                
+                <div class="mb-3">
+                    <label for="descricao" class="form-label fw-bold">Nome</label>
+                    <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex: Painéis solares" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="local" class="form-label fw-bold">Valor</label>
+                    <input type="text" class="form-control" id="valor" name="valor" placeholder="Ex: 00.00" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="observacao" class="form-label fw-bold">Observação</label>
+                    <textarea class="form-control" id="observacao" name="observacao" rows="4" placeholder="Detalhes importantes, condições, etc."></textarea>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="{{ url_for('main.index_forn') }}" class="btn btn-danger">Cancelar</a>
+                    <button type="submit" class="btn btn-warning fw-bold">Salvar Serviço
+                </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -9,7 +9,7 @@
             <span class="text-muted me-3">Bem-vindo(a), {{ usuario }}!</span>
             <a href="{{ url_for('main.novo_orcamento') }}" class="btn btn-warning">
                 <i class="bi bi-plus-circle me-1"></i>
-                Novo Orçamento
+                Novo Serviço
             </a>
         </div>
     </div>
@@ -54,7 +54,7 @@
         <div class="col-lg-5">
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-white fw-bold fs-5">
-                    <i class="bi bi-building me-2"></i>Empresas Parceiras
+                    <i class="bi bi-building me-2"></i>Serviços Oferecidos
                 </div>
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush">
@@ -67,7 +67,7 @@
                             <a href="#" class="btn btn-outline-secondary btn-sm">Ver Perfil</a>
                         </li>
                         {% else %}
-                            <li class="list-group-item text-center text-muted p-4">Nenhuma empresa cadastrada.</li>
+                            <li class="list-group-item text-center text-muted p-4">Nenhuma serviço cadastrada.</li>
                         {% endfor %}
                     </ul>
                 </div>
